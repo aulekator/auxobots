@@ -1,0 +1,38 @@
+/* Remove hover effects from card links */
+a[href*="backtest"],
+a[href*="demo_trading"],
+a[href*="live_trading"],
+a[href*="bot_setup"] {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+a[href*="backtest"]:hover,
+a[href*="demo_trading"]:hover,
+a[href*="live_trading"]:hover,
+a[href*="bot_setup"]:hover {
+    color: inherit !important;
+    background-color: transparent !important;
+    text-decoration: none !important;
+}
+
+/* Specifically target the h6 text inside the linked cards */
+.wg-card a h6.counter {
+    color: inherit !important;
+    transition: none; /* optional: removes any fade effect */
+}
+
+/* Reduce text size on mobile (phones) */
+@media (max-width: 576px) {
+    .wg-card h6.counter {
+        font-size: 0.9rem !important; /* or 14px, adjust as needed */
+    }
+    
+    .wg-card .icon i {
+        font-size: 2.2rem !important; /* slightly smaller icon on mobile if needed */
+    }
+    
+    .wg-card {
+        padding: 16px !important; /* optional: make card more compact on mobile */
+    }
+}

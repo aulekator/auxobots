@@ -1,0 +1,53 @@
+{% load static i18n %}
+<!-- header -->
+<header class="header">
+    <div class="container">
+        <div class="header__content">
+            <!-- btn -->
+            <button class="header__btn" type="button" aria-label="header__nav">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <!-- end btn -->
+
+            <!-- logo -->
+            <a href="{% url 'pages:home' %}" class="header__logo">
+                <!-- <img src="{% static 'frontend/img/logo.svg' %}" alt=""> -->
+            </a>
+            <!-- end logo -->
+
+            <!-- tagline -->
+            <span class="header__tagline">Auxobot Trading</span>
+            <!-- end tagline -->
+
+            <!-- navigation start -->
+            <ul class="header__nav" id="header__nav">
+                <li>
+                    <a href="{% url 'pages:home' %}">Home</a>
+                </li>
+                <li>
+                    <a href="#how-it-works">How it works</a>
+                </li>
+                <li>
+                    <a href="#features">Features</a>
+                </li>
+                <li>
+                    <a href="#security">Security</a>
+                </li>
+                <li>
+                    <a href="#pricing">Pricing</a>
+                </li>
+            </ul>
+            <!-- navigation ends -->
+
+            <!-- Dashboard -->
+            <a href="{% url 'auxobot:dashboard' %}" class="header__profile" style="color: white;">
+                <i class="fas fa-user"></i>
+                <span>Dashboard</span>
+            </a>
+            <!-- end Dashboard -->
+        </div>
+    </div>
+</header>
+<!-- end header -->

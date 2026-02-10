@@ -1,0 +1,397 @@
+<!-- blog/templates/blog/post_list.html -->
+{% extends 'frontend/base.html' %}
+{% load i18n static %}
+
+{% block extra_css %}
+    <!-- <link rel="stylesheet" href="{% static 'blog/css/styles.css' %}"> -->
+     <style>
+ 
+
+        h1, h2, h3, h4, h5 {
+            color: #333;
+        }
+
+   
+        .single-blog img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .single-blog a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .single-blog a:hover {
+            text-decoration: underline;
+        }
+
+        .post-category {
+            font-size: 14px;
+            color: #555;
+            text-transform: uppercase;
+        }
+
+        .blog-post-title {
+            margin: 10px 0;
+        }
+
+        .post-info-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .post-creator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .creator-pic img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .posting-time {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .right-sided-img {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 20px;
+        }
+
+        .vertical-style {
+            display: block;
+        }
+
+        .pok-sidebar .recent-posts {
+            margin-bottom: 20px;
+        }
+
+        .single-recent-post {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .single-recent-post .part-img img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+
+        .posts-category ul, .tag-lines .tag-words {
+            list-style: none;
+            padding: 0;
+        }
+    
+
+        .tag-words a {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .search-bar-element form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar-element input {
+            padding: 8px;
+            flex: 1;
+        }
+
+        .search-bar-element button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-bar-element button:hover {
+            background-color: #0056b3;
+        }
+
+        .pok-pagination ul {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .pok-pagination li a {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            color: #007bff;
+        }
+
+        .pok-pagination li a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pok-pagination .dotted {
+            padding: 8px 12px;
+        }
+     </style>
+{% endblock %}
+
+{% block content %}
+<div class="prd-breadcrumb">
+    <div class="brd-shape">
+        <div class="brd-img brd-img-1" data-aos="fade-right" data-aos-delay="200" data-aos-duration="500" data-aos-easing="ease-in">
+            <img src="{% static 'img/breadcrumb/brd-img-1.png' %}" alt="">
+        </div>
+        <div class="brd-img brd-img-2" data-aos="fade-left" data-aos-delay="200" data-aos-duration="500" data-aos-easing="ease-in">
+            <img src="{% static 'img/breadcrumb/brd-img-2.png' %}" alt="">
+        </div>
+    </div>
+    <div class="container">
+        <div class="brd-content">
+            <div data-aos="fade-up" data-aos-delay="200" data-aos-duration="500" data-aos-easing="ease-in">
+                <span class="sub-title">blog posts</span>
+            </div>    
+            <h2 class="title" data-aos="fade-up" data-aos-delay="350" data-aos-duration="500" data-aos-easing="ease-in">Get Betting News & Bet Winner Stories</h2>
+            <div class="page-direction">
+                <ul>
+                    <li>
+                        <span class="icon"><i class="fa-solid fa-house"></i></span>
+                        <span class="text"><a href="{% url 'sqblog:post_list' %}">Home</a></span>
+                    </li>
+                    <li>
+                        <span class="icon"><i class="fa-light fa-caret-right fa-xl"></i></span>
+                        <span class="text">blog posts</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="blog-posts">
+    <div class="global-shape style-3">
+        <img src="{% static 'img/shapes/shape-1.png' %}" alt="" data-aos="fade-left" data-aos-duration="500" data-aos-offset="200" data-aos-easing="ease-in" data-aos-delay="400">
+    </div>
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-xl-8 col-lg-12">
+                <div class="row g-4">
+                    {% for post in posts %}
+                        <div class="col-xl-12 col-lg-12 col-md-6" data-aos="fade-up" data-aos-delay="{% cycle '100' '150' '200' '300' %}" data-aos-duration="500" data-aos-easing="ease-in">
+                            <div class="single-blog{% if forloop.counter|divisibleby:2 %} right-sided-img{% endif %}">
+                                <div class="part-img">
+                                    {% if post.image %}
+                                        <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                                    {% else %}
+                                        <img src="{% static 'img/blog/blog-post-1.jpg' %}" alt="">
+                                    {% endif %}
+                                </div>
+                                <div class="part-text">
+                                    {% if post.categories.all %}
+                                        <span class="post-category">{{ post.categories.first.name }}</span>
+                                    {% else %}
+                                        <span class="post-category">Uncategorized</span>
+                                    {% endif %}
+                                    <h3 class="blog-post-title">
+                                        <a href="{% url 'sqblog:post_detail' slug=post.slug %}">{{ post.title }}</a>
+                                    </h3>
+                                    <p>{{ post.content|safe|truncatewords_html:30 }}</p>
+                                    <div class="post-info-stats">
+                                        <a href="#0" class="post-creator">
+                                            <div class="creator-pic">
+                                                <img src="{% static 'img/blog/user-1.jpg' %}" alt="">
+                                            </div>
+                                            <span class="creator-name">{{ post.author.get_full_name|default:post.author.username }}</span>
+                                        </a>
+                                        <span class="posting-time">{{ post.pub_date|timesince }} ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-xl-12 col-lg-12 col-md-6">
+                            <p>No posts available.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-12">
+                <div class="row g-4">
+                    {% for recent_post in recent_posts|slice:":2" %}
+                        <div class="col-xl-12 col-lg-12 col-md-6" data-aos="fade-up" data-aos-delay="{% cycle '100' '150' %}" data-aos-duration="500" data-aos-easing="ease-in">
+                            <div class="single-blog vertical-style">
+                                <div class="part-img">
+                                    {% if recent_post.image %}
+                                        <img src="{{ recent_post.image.url }}" alt="{{ recent_post.title }}">
+                                    {% else %}
+                                        <img src="{% static 'img/blog/blog-post-2.jpg' %}" alt="">
+                                    {% endif %}
+                                </div>
+                                <div class="part-text">
+                                    {% if recent_post.categories.all %}
+                                        <span class="post-category">{{ recent_post.categories.first.name }}</span>
+                                    {% else %}
+                                        <span class="post-category">Uncategorized</span>
+                                    {% endif %}
+                                    <h3 class="blog-post-title">
+                                        <a href="{% url 'post_detail' slug=recent_post.slug %}">{{ recent_post.title }}</a>
+                                    </h3>
+                                    <p>{{ recent_post.content|safe|truncatewords_html:30 }}</p>
+                                    <div class="post-info-stats">
+                                        <a href="#0" class="post-creator">
+                                            <div class="creator-pic">
+                                                <img src="{% static 'img/blog/user-2.jpg' %}" alt="">
+                                            </div>
+                                            <span class="creator-name">{{ recent_post.author.get_full_name|default:recent_post.author.username }}</span>
+                                        </a>
+                                        <span class="posting-time">{{ recent_post.pub_date|timesince }} ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% if is_paginated %}
+            <div class="pok-pagination" data-aos="fade-up" data-aos-delay="100" data-aos-duration="500" data-aos-easing="ease-in">
+                <ul>
+                    {% if page_obj.has_previous %}
+                        <li>
+                            <a href="?page={{ page_obj.previous_page_number }}"><i class="fa-solid fa-angles-left"></i></a>
+                        </li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li>
+                                <a href="?page={{ num }}" class="active">{{ num }}</a>
+                            </li>
+                        {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                            <li>
+                                <a href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% elif num == page_obj.paginator.num_pages or num == 1 %}
+                            <li>
+                                <a href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% elif num == page_obj.number|add:-3 or num == page_obj.number|add:3 %}
+                            <li class="dotted">
+                                <i class="fa-solid fa-ellipsis"></i>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li>
+                            <a href="?page={{ page_obj.next_page_number }}"><i class="fa-solid fa-angles-right"></i></a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+        <div class="pok-sidebar" data-aos="fade-up" data-aos-delay="150" data-aos-duration="500" data-aos-easing="ease-in">
+            <div class="row">
+                <div class="col-xl-4 col-lg-12" data-aos="fade-up" data-aos-delay="250" data-aos-duration="500" data-aos-easing="ease-in">
+                    <div class="single-element recent-postss">
+                        <h4 class="title">Recent posted</h4>
+                        <div class="recent-post-slider owl-carousel owl-theme">
+                            {% for recent_post in recent_posts %}
+                                <div class="recent-posts">
+                                    <div class="single-recent-post">
+                                        <div class="part-img">
+                                            {% if recent_post.image %}
+                                                <img src="{{ recent_post.image.url }}" alt="{{ recent_post.title }}">
+                                            {% else %}
+                                                <img src="{% static 'img/blog/recent-post-1.jpg' %}" alt="">
+                                            {% endif %}
+                                        </div>
+                                        <div class="part-text">
+                                            <h5 class="post-title">
+                                                <a href="{% url 'sqblog:post_detail' slug=recent_post.slug %}">{{ recent_post.title }}</a>
+                                            </h5>
+                                            <div class="post-stats">
+                                                <span class="text">
+                                                    by 
+                                                    <a class="posted-by" href="#">{{ recent_post.author.get_full_name|default:recent_post.author.username }}</a>
+                                                </span>
+                                                <span class="text">
+                                                    in 
+                                                    {% if recent_post.categories.all %}
+                                                        <a class="category-by" href="{% url 'sqblog:post_list_by_category' category_slug=recent_post.categories.first.slug %}">{{ recent_post.categories.first.name }}</a>
+                                                    {% else %}
+                                                        <a class="category-by" href="#">Uncategorized</a>
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8 col-lg-12">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="300" data-aos-duration="500" data-aos-easing="ease-in">
+                            <div class="single-element posts-category">
+                                <h4 class="title">posts category</h4>
+                                <ul class="category-list">
+                                    {% for category in categories %}
+                                        <li>
+                                            <a href="{% url 'sqblog:post_list_by_category' category_slug=category.slug %}">
+                                                <span class="cl-cat">{{ category.name }}</span>
+                                                <span class="q-numb">({{ category.post_set.count }})</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="350" data-aos-duration="500" data-aos-easing="ease-in">
+                            <div class="single-element tag-lines">
+                                <h4 class="title">posts Tagline</h4>
+                                <div class="tag-words">
+                                    {% for tag in tags %}
+                                        <a href="{% url 'sqblog:post_list_by_tag' tag_slug=tag.slug %}" class="single-tag">{{ tag.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-bar-element" data-aos="fade-up" data-aos-delay="400" data-aos-duration="500" data-aos-easing="ease-in">
+                        <form action="{% url 'sqblog:post_list' %}" method="get">
+                            <input type="text" name="search" placeholder="Search a Blog....">
+                            <button type="submit"><i class="fa-light fa-magnifying-glass"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            $('.recent-post-slider').owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: false,
+                items: 1,
+                autoplay: true,
+                autoplayTimeout: 3000,
+            });
+        });
+    </script>
+{% endblock %}

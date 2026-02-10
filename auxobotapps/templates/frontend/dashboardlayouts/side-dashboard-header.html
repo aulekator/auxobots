@@ -1,0 +1,215 @@
+{% load static %}
+<div class="section-menu-left">
+    <div class="box-logo">
+        <a href="" id="site-logo-inner">
+            <span class="text-logo">AuxoBots</span>
+        </a>
+        <div class="button-show-hide">
+            <i class="icon-back"></i>
+        </div>
+    </div>
+    <div class="section-menu-left-wrap">
+        <div class="center">
+            <div class="center-item">
+                <div class="center-heading f14-regular text-Gray menu-heading mb-12">Navigation</div>
+            </div>
+            <div class="center-item">
+                 <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="" class="menu-item-button">
+                            <div class="icon">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <div class="text">Trade History</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="" class="menu-item-button">
+                            <div class="icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="text">P&L Overview</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="" class="menu-item-button">
+                            <div class="icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <div class="text">Performance Metrics</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="" class="menu-item-button">
+                            <div class="icon">
+                                <i class="fas fa-list-alt"></i>
+                            </div>
+                            <div class="text">Current Positions</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="" class="menu-item-button">
+                            <div class="icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="text">Portfolio Overview</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="" class="menu-item-button">
+                            <div class="icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div class="text">Bot Strategies</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="" class="menu-item-button">
+                            <div class="icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="text">Risk Management</div>
+                        </a>
+                    </li>
+                    <!-- <li class="menu-item">
+                        <a href="" class="menu-item-button">
+                            <div class="icon">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div class="text">Start Bot</div>
+                        </a>
+                    </li> -->
+                    <li class="menu-item">
+                        <a href="" class="menu-item-button">
+                            <div class="icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <div class="text">Settings</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+         
+    </div>
+</div>
+
+<div class="section-content-right">
+    <!-- header-dashboard -->
+    <div class="header-dashboard">
+        <div class="wrap">
+            <div class="header-left">
+                <div class="button-show-hide">
+                    <i class="icon-menu"></i>
+                </div>
+                <h6>Dashboard</h6>
+                <form class="form-search flex-grow">
+                    <fieldset class="name">
+                        <input type="text" placeholder="Type to search …" class="show-search style-1" name="name" tabindex="2" value="" aria-required="true" required="">
+                    </fieldset>
+                    <div class="button-submit">
+                        <button class="" type="submit"><i class="icon-search-normal1"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="header-grid">
+                <div class="header-btn">
+                    <div class="popup-wrap message type-header">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="header-item">
+                                    <i class="icon-sms"></i>
+                                </span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end has-content" aria-labelledby="dropdownMenuButton1" >
+                                <li>
+                                    <h6>Message</h6>
+                                </li>
+                                <li>
+                                    <div class="message-item w-full wg-user active">
+                                        <div class="image">
+                                            <img src="{% static 'auxobot/images/avatar/user-1.png' %}" alt="">
+                                        </div>
+                                        <div class="flex-grow">
+                                            <div class="flex items-center justify-between">
+                                                <a href="#" class="body-title name">coming soon</a>
+                                                <div class="time">10:13 PM</div>
+                                            </div>
+                                            <div class="text-tiny desc">Hello?</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="message.html" class="tf-button style-1 f12-bold w-100">
+                                        View All
+                                        <i class="icon icon-send"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="popup-wrap noti type-header">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="header-item">
+                                    <i class="icon-notification1"></i>
+                                </span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end has-content" aria-labelledby="dropdownMenuButton2" >
+                                <li>
+                                    <h6>Notifications</h6>
+                                </li>
+                                <li>
+                                    <div class="notifications-item item-1">
+                                        <div class="image">
+                                            <i class="icon-setting-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="body-title-2">coming soon</div>
+                                            <div class="text-tiny">coming soon</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="notifications.html" class="tf-button style-1 f12-bold w-100">
+                                        View All
+                                        <i class="icon icon-send"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="line1"></div>
+                <div class="popup-wrap user type-header">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="header-user wg-user">
+                                <span class="image">
+                                    <img src="{% static 'auxobot/images/avatar/avatar.jpg' %}" alt="">
+                                </span>
+                                <span class="content flex flex-column">
+                                    <span class="label-02 text-Black name">{{ user.username|default:"User" }}</span>
+                                    <!-- <span class="f14-regular text-Gray">vip user</span> -->
+                                </span>
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end has-content" aria-labelledby="dropdownMenuButton3" >
+                            <li>
+                                <a href="" class="user-item">
+                                    <div class="body-title-2">Setting</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'account_logout' %}" class="user-item">
+                                    <div class="body-title-2">Log out</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- /header-dashboard -->
+</div>

@@ -1,0 +1,553 @@
+:root{
+    --background: #080c17;
+    --light-bg: #0b111e;
+    --border: #1F2937;
+    --card: #111827;
+    --card-2: #0E1324;
+    --secondary: #3c83f5;
+    --secondary-2: #3b82f6;
+    --text-main: #E5E7EB;
+    --text-muted: #9CA3AF;
+    --green: #1ebdae;
+}
+.text-gradient{
+    background: linear-gradient(70deg, #00c6ff, #0072ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+i.red{
+    color: red;
+}
+i.green{
+    color: var(--green);
+}
+i.yellow{
+    color: rgb(188, 188, 32);
+}
+.section-title{
+    margin-bottom: 60px;
+}
+.section-title h1{
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 54px;
+}
+.section-title h4{
+    color: var(--secondary);
+    text-transform: uppercase;
+}
+.section-title p{
+    color: var(--text-muted);
+    font-size: 21px;
+    margin-top: 20px;
+}
+.header{
+    background: var(--background);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.header__profile{
+    background: var(--secondary-2);
+    border: none;
+}
+.header__profile span{
+    color: var(--background);   
+}
+.footer{
+    background: var(--background);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* hero section */
+.hero-section{
+    padding: 100px 0 36px;
+    text-align: center;
+}
+.hero-special{
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: var(--text-main);
+    font-weight: 550;
+}
+.hero-special i{
+    margin-right: 15px;
+    color: var(--green);
+}
+.hero-title{
+    font-size: 78px;
+    text-transform: capitalize;
+    color: #fff;
+    font-weight: 900;
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+.hero-text{
+    font-size: 22px;
+    line-height: 32px;
+    font-weight: 580;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    margin-top: 15px;
+}
+.hero-btns{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 40px;
+}
+.hero-btns .hero-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    height: 60px;
+    border-radius: 10px;
+    background: var(--secondary-2);
+    font-size: 18px;
+    color: var(--light-bg);
+    text-transform: uppercase;
+    font-weight: 600;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 114, 255, 0.6);
+}
+.hero-features{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 60px;
+}
+.hero-feature{
+    display: flex;
+    gap: 15px;
+}
+.hero-feature span{
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.hero-feature span.icon i{
+    color: var(--text-main);
+    font-size: 22px;
+}
+@media only screen and (max-width: 1199px) {
+    .hero-title{
+        font-size: 72px;
+    }
+    .hero-text{
+        font-size: 20px;
+    }
+    .hero-section{
+        margin-top: 40px;
+    }
+    
+}
+@media only screen and (max-width: 991px) {
+    .hero-title{
+        font-size: 52px;
+    }
+    .hero-text{
+        font-size: 18px;
+    }
+    .section-title h1{
+        font-size: 38px;
+    }
+}
+
+@media (min-width: 768px) {
+    .hero-section {
+        padding: 100px 0 46px;
+    }
+}
+
+@media (max-width: 767px) {
+    .hero-title{
+        font-size: 44px;
+    }
+    .hero-btns .hero-btn{
+        width: 50%;
+    }
+    .hero-section{
+        margin-top: 80px;
+        padding-top: 70px;
+    }
+    .hero-feature span.text{
+        font-size: 12px;
+    }
+    .container{
+        max-width: 720px;
+    }
+}
+
+@media (max-width: 525px) {
+    .hero-title{
+        font-size: 38px;
+    }
+    .hero-text{
+        font-size: 16px;
+    }
+    .hero-btns .hero-btn{
+        font-size: 16px;
+    }
+    .hero-feature span.text{
+        font-size: 11px;
+    }
+  
+}
+@media only screen and (max-width: 495px){
+    .hero-features{
+        flex-direction: column;
+        justify-content: center;
+    }
+    .section-title h1{
+        font-size: 32px;
+    }
+    .hero-feature{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+        gap: 10px;
+        text-align: center;
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid rgba(255,255,255,0.05);
+        background: linear-gradient(150deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 25px 10px;
+    }
+    .hero-feature span.text{
+        font-size: 18px;
+    }
+}
+@media only screen and (max-width: 425px){
+    .hero-btns{
+        flex-direction: column;
+    }
+    .hero-btns .hero-btn{
+        width: 90%;
+    }
+    .hero-special{
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 329px){
+    .hero-special{
+        font-size: 12px;
+    }
+}
+@media only screen and (max-width: 320px){
+    .hero-special{
+        font-size: 12px;
+    }
+}
+@media only screen and (max-width: 320px){
+    .hero-special{
+        font-size: 12px;
+    }
+    .hero-btns .hero-btn{
+        width: 100%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .hero-section {
+        padding: 150px 0 76px;
+    }
+}
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1500px;
+    }
+}
+
+/* how it works section */
+.advertise,
+.dashboard-view,
+.pricing,
+.security-features,
+.home-features,
+.how-it-works{
+    padding-top: 100px;
+    padding-bottom: 30px;
+}
+.home-features .single-card,
+.how-it-works .single-card{
+    background: #0b101d;
+    border: 1px solid var(--card);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 30px;
+    transition: all ease-in-out 0.2s;
+}
+.home-features .single-card{
+    height: 300px;
+}
+.home-features .single-card:hover,
+.how-it-works .single-card:hover{
+    box-shadow: 0 0 30px rgba(0, 114, 255, 0.3);
+    transform: scale(1.02);
+}
+.home-features .single-card span.icon,
+.how-it-works .single-card span.icon{
+    background: #101c3d;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: var(--secondary);
+    font-size: 28px;
+}
+.how-it-works .single-card span.number{
+    font-weight: 700;
+    font-size: 44px;
+}
+.security-features .single-card .title,
+.home-features .single-card .title,
+.how-it-works .single-card .title{
+    color: var(--text-main);
+    margin: 30px 0;
+}
+.security-features .single-card .text,
+.home-features .single-card .text,
+.how-it-works .single-card .text{
+    color: var(--text-muted);
+    font-size: 18px;
+}
+.security-features .single-card{
+    background: #0b101d;
+    border: 1px solid var(--card);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.security-features .single-card span.icon{
+    background: #101c3d;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: var(--secondary);
+    font-size: 28px;
+    margin: 0 auto;
+}
+@media only screen and (max-width: 767px) {
+    .security-features .single-card .text,
+    .home-features .single-card .text,
+    .how-it-works .single-card .text{
+        font-size: 14px;
+    }
+    .security-features .single-card .title,
+    .home-features .single-card .title,
+    .how-it-works .single-card .title{
+        margin: 20px 0;
+    }
+    .home-features .single-card{
+        height: auto;
+    }
+}
+@media only screen and (max-width:716px) {
+    .security-features .single-card .title,
+    .home-features .single-card .title,
+    .how-it-works .single-card .title{
+        font-size: 17px;
+    }
+}
+@media only screen and (max-width:575px) {
+    .security-features .single-card .title,
+    .home-features .single-card .title,
+    .how-it-works .single-card .title{
+        font-size: 21px;
+    }
+    .security-features .single-card .text,
+    .home-features .single-card .text,
+    .how-it-works .single-card .text{
+        font-size: 16px;
+    }
+}
+/* pricing section */
+.pricing .pricing-card{
+    background: #0b101d;
+    border: 1px solid var(--card);
+    padding: 40px 40px 10px 40px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    transition: all ease-in-out 0.25s;
+}
+.pricing .pricing-card:hover{
+    box-shadow: 0 0 30px rgba(0, 114, 255, 0.3);
+    transform: scale(1.02);
+}
+.pricing .pricing-card .title{
+    color: var(--text-main);
+    text-transform: capitalize;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.pricing .pricing-card .desc{
+    color: var(--text-muted);
+    font-size: 18px;
+    text-align: center;
+}
+.pricing .pricing-card .price span{
+    color: var(--text-main);
+    font-size: 38px;
+    font-weight: 600;
+}
+.pricing .pricing-card .price sub{
+    color: var(--text-muted);
+    font-size: 18px;
+    font-weight: 550;
+}
+.pricing .pricing-card .features{
+    margin: 40px 0;
+}
+.pricing .pricing-card .features div{
+    margin-bottom: 15px;
+}
+.pricing .pricing-card .features div span.icon{
+    color: var(--green);
+    font-size: 21px;
+}
+.pricing .pricing-card .features div span.text{
+    color: var(--text-main);
+}
+.pricing .pricing-card a.btn{
+    width: 100%;
+    background: var(--secondary-2);
+    color: var(--background);
+    font-size: 21px;
+    font-weight: 600;
+    padding: 15px 10px;
+}
+@media only screen and (max-width:1199px) {
+    .pricing .pricing-card{
+        padding: 20px 20px 10px 20px;
+    }
+    .pricing .pricing-card .features div span.icon{
+        font-size: 18px;
+    }
+}
+@media only screen and (max-width:767px) {
+    .pricing .pricing-card .features div span.text,
+    .pricing .pricing-card .features div span.icon{
+        font-size: 16px;
+    }
+    .pricing .pricing-card{
+        padding: 10px;
+    }
+}
+@media only screen and (max-width:716px) {
+    .pricing .pricing-card .features div span.text,
+    .pricing .pricing-card .features div span.icon{
+        font-size: 14px;
+    }
+}
+@media only screen and (max-width:575px) {
+    .pricing .pricing-card .features div span.text,
+    .pricing .pricing-card .features div span.icon{
+        font-size: 16px;
+    }
+    .pricing .pricing-card{
+        padding: 20px 20px 10px 20px;
+    }
+}
+
+.dashboard-view .dashboard-img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 991px;
+    height: auto;
+    margin: 0 auto;
+}
+.dashboard-view .dashboard-img img{
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 60px rgba(0, 114, 255, 0.8);
+    border-radius: 8px;
+}
+
+.advertise{
+    background: linear-gradient(to bottom left, #137c72, #0b111e, #0b111e);
+}
+.advertise .content span.icon{
+    background: linear-gradient(70deg, #00c6ff, #0072ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    margin: 0 auto;
+}
+.advertise .content span.icon i{
+    font-size: 34px;
+    color: #080c17;
+}
+.advertise .content .title{
+    color: var(--text-main);
+    font-size: 78px;
+    font-weight: 800;
+    margin: 40px 0;
+}
+.advertise .content .text{
+    color: var(--text-muted);
+    font-size: 22px;
+}
+.advertise .content a{
+    background-color: var(--secondary-2);
+    color: var(--background);
+    padding: 15px 10px;
+    width: 210px;
+    border-radius: 5px;
+    font-weight: 600;
+    margin: 20px 0;
+    text-align: center;
+}
+@media only screen and (max-width:1199px) {
+    .advertise .content .title{
+        font-size: 68px;
+    }
+    .advertise .content .text{
+        color: var(--text-muted);
+        font-size: 20px;
+    }
+}
+@media only screen and (max-width:991px) {
+    .advertise .content .title{
+        font-size: 58px;
+    }
+    .advertise .content .text{
+        color: var(--text-muted);
+        font-size: 18px;
+    }
+}
+@media only screen and (max-width:767px) {
+    .advertise .content .title{
+        font-size: 44px;
+    }
+}
+@media (max-width: 525px) {
+    .advertise .content .title{
+        font-size: 38px;
+    }
+    .advertise .content .text{
+        color: var(--text-muted);
+        font-size: 16px;
+    }
+}

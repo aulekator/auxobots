@@ -1,0 +1,95 @@
+{% load static i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        {% block title %}
+        <title>{% block page_title %} AUXOBOTS CRYPTO, FOREX TRADING BOT {% endblock %}{{ site.name }}</title>
+        {% endblock %}
+        {% block metas %}
+        <meta name="description" content="Maximize your profits with our advanced crypto and forex trading bot. We specialize in automated trading solutions, algorithmic strategies, high-frequency trading, and custom bot development tailored to cryptocurrency and forex markets. Start trading smarter today!">
+        <meta name="keywords" content="crypto trading bot, forex trading bot, automated trading, algorithmic trading, cryptocurrency bot, forex robot, trading automation, crypto signals, forex signals, high-frequency trading, trading strategy, bot development, arbitrage bot, scalping bot">
+        <meta name="author" content="auxobot">
+        {% endblock metas %}
+         
+        
+        <script src="https://kit.fontawesome.com/3e04c5a057.js" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+            <!-- Theme Style -->
+        <link rel="stylesheet" type="text/css" href="{% static 'auxobot/css/animate.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'auxobot/css/animation.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'auxobot/css/bootstrap.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'auxobot/css/bootstrap-select.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'auxobot/css/styles.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'auxobot/css/custom.css' %}">
+
+        <!-- Font -->
+        <link rel="stylesheet" href="{% static 'auxobot/font/fonts.css' %}">
+
+        <!-- Icon -->
+        <link rel="stylesheet" href="{% static 'auxobot/icon/style.css' %}">
+
+        {% block extra_css %} {% endblock %}
+ 
+    </head>
+    <body class="counter-scroll">
+        <!-- #wrapper -->
+        <div id="wrapper">
+            <!-- #page -->
+            <div id="page" class="">
+                <!-- layout-wrap -->
+                <div class="layout-wrap loader-off">
+                    <!-- preload -->
+                    <div id="preload" class="preload-container">
+                        <div class="preloading">
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <!-- dashboarrd side start -->
+                    {% block navigation %}
+                        {% include 'frontend/dashboardlayouts/side-dashboard-header.html' %}
+                    {% endblock %}
+                    <!-- dashboarrd side start end -->
+
+                    
+                     
+
+                    <!-- content start -->
+                    {% block content %}
+
+                    {% endblock %}
+                    <!-- content end -->
+                </div>
+            </div>
+        </div>
+
+                 
+            <!-- Javascript -->
+        <script src="{% static 'auxobot/js/jquery.min.js' %}"></script>
+        <script src="{% static 'auxobot/js/countto.js' %}"></script>
+        <script src="{% static 'auxobot/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'auxobot/js/bootstrap-select.min.js' %}"></script>
+        <script src="{% static 'auxobot/js/apexcharts/apexcharts.js' %}"></script>
+        <script src="{% static 'auxobot/js/apexcharts/small-chart-1.js' %}"></script>
+        <script src="{% static 'auxobot/js/apexcharts/small-chart-2.js' %}"></script>
+        <script src="{% static 'auxobot/js/apexcharts/small-chart-3.js' %}"></script>
+        <script src="{% static 'auxobot/js/apexcharts/small-chart-4.js' %}"></script>
+        <script src="{% static 'auxobot/js/apexcharts/line-chart-twoline.js' %}"></script>
+        <script src="{% static 'auxobot/js/apexcharts/candlestick-1.js' %}"></script>
+        <script src="{% static 'auxobot/js/apexcharts/candlestick-4.js' %}"></script>
+        <script src="{% static 'auxobot/js/apexcharts/candlestick-5.js' %}"></script>
+        <!-- <script src="js/switcher.js"></script> -->
+        <script defer src="{% static 'auxobot/js/theme-settings.js' %}"></script>
+        <script src="{% static 'auxobot/js/main.js' %}"></script>
+        {% block extra_js %}{% endblock %} 
+    </body>
+</html>

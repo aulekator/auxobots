@@ -1,0 +1,122 @@
+{% extends 'frontend/base.html' %}
+{% load i18n static my_filters %}
+
+{% block content %}
+<div class="stricky-header stricked-menu main-menu">
+    <div class="sticky-header__content"></div>
+</div>
+<section class="page-header">
+    <div class="page-header__bg"></div>
+    <div class="page-header__overlay"></div>
+    <div class="container">
+        <ul class="page-header__breadcrumb list-unstyled">
+            <li><a href="{% url 'sqpages:home' %}">Home</a></li>
+            <li><span>Blog</span></li>
+        </ul>
+        <h2 class="page-header__title">Blog posts</h2>
+    </div>
+</section>
+<section class="blog-page">
+    <div class="container">
+        <div class="blog-page__carousel ogency-owl__dots ogency-owl__carousel owl-theme owl-carousel" data-owl-options='{
+            "items": 3,
+            "margin": 30,
+            "smartSpeed": 700,
+            "loop": {% if posts|length > 2 %}true{% else %}false{% endif %},
+            "autoplay": {% if posts|length > 2 %}true{% else %}false{% endif %},
+            "nav": false,
+            "dots": true,
+            "navText": ["<span class=\"icon-left-arrow\"></span>","<span class=\"icon-right-arrow\"></span>"],
+            "responsive": {
+                "0": {"items": 1, "margin": 0},
+                "600": {"items": 2},
+                "992": {"items": 3}
+            }
+        }'>
+            {% for post in posts %}
+            <div class="item">
+                <div class="blog-one__item">
+                    <div class="blog-one__item__image">
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" alt="{{ post.title|escape }}">
+                        {% else %}
+                            <img src="{% static 'sqstatic/assets/images/blog/blog-default.jpg' %}" alt="{{ post.title|escape }}">
+                        {% endif %}
+                        <a href="{% url 'sqblog:post_detail' post.slug %}"></a>
+                        <span>{{ post.pub_date|date:"d M" }}</span>
+                    </div>
+                    <div class="blog-one__item__content">
+                        <div class="blog-one__item__meta has-border">
+                            {% if post.categories.all %}
+                                <a href="{% url 'sqblog:post_list_by_category' post.categories.first.slug %}">{{ post.categories.first.name }}</a>
+                            {% else %}
+                                <a href="#">Uncategorized</a>
+                            {% endif %}
+                            <span>.</span>{{ post.comments.count }} Comment{{ post.comments.count|pluralize }}
+                        </div>
+                        <h3 class="blog-one__item__title">
+                            <a href="{% url 'sqblog:post_detail' post.slug %}">{{ post.title }}</a>
+                        </h3>
+                        <a class="blog-one__item__btn" href="{% url 'sqblog:post_detail' post.slug %}">Read More<span class="icon-down-right"></span></a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="item">
+                <div class="blog-one__item">
+                    <div class="blog-one__item__content">
+                        <h3 class="blog-one__item__title">No posts available</h3>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="blog-page__pagination">
+            <ul class="pagination list-unstyled">
+                {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}"><span class="icon-left-arrow"></span></a></li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                <li {% if page_obj.number == num %}class="active"{% endif %}>
+                    <a href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}"><span class="icon-right-arrow"></span></a></li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<div class="mobile-nav__wrapper">
+    <div class="mobile-nav__overlay mobile-nav__toggler"></div>
+    <div class="mobile-nav__content">
+        <span class="mobile-nav__close mobile-nav__toggler"><i class="fa fa-times"></i></span>
+        <div class="logo-box">
+         <a href="{% url 'sqpages:home' %}">
+            <span class="sq">Sq</span> <span class="ananlysis">- Ananlysis</span> <span class="dot">.</span>
+        </a>
+        </div>
+        <div class="mobile-nav__container"></div>
+        <ul class="mobile-nav__contact list-unstyled">
+            <li>
+                <i class="fab fa-whatsapp"></i>
+                <a href="https://wa.me/+2348162058213" class="sq-btn">Contact us via WhatsApp</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Back to top -->
+<a href="#" class="scroll-top">
+    <svg class="scroll-top__circle" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+    </svg>
+</a>
+
+ 
+{% endblock %}

@@ -1,0 +1,52 @@
+.text-logo {
+    font-family: 'Arial Black', sans-serif; /* Or a modern/futuristic font like 'Orbitron' or 'Rajdhani' from Google Fonts */
+    font-size: 16px;
+    font-weight: bold;
+    color: #00ff99; /* Neon green for a crypto/tech feel */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+    .text-logo {
+        color: #00cc77; /* Slightly adjusted for dark mode if needed */
+    }
+}
+
+.customchart-small {
+    position: relative; /* Required for absolute positioning */
+    height: 60px; /* Match your small chart height */
+}
+
+.customchart-plus-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;            /* Fixed width */
+    height: 32px;           /* Fixed height = width for perfect circle */
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;     /* This makes it a perfect circle */
+    font-size: 16px;
+    color: #161326;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    z-index: 20;
+    padding: 0;             /* Remove any default padding */
+    line-height: 1;         /* Helps center the icon */
+}
+
+.customchart-plus-button :hover {
+    background: #00cc77;    /* Or your theme green */
+    color: white;
+    transform: scale(1.1);
+}
+
+.customchart-plus-button  i {
+    margin: 0;              /* No margin shift */
+}

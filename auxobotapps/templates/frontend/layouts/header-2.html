@@ -1,0 +1,28 @@
+    <div class="page-wrapper">
+        <header class="main-header">
+            <nav class="main-menu">
+                <div class="container-fluid">
+                    <div class="main-menu__logo">
+                        <a href="">
+                             <span class="sq">Sq</span> <span class="ananlysis">- Ananlysis</span> <span class="dot">.</span>
+                        </a>
+                    </div>
+                    <div class="main-menu__nav">
+                        <ul class="main-menu__list">
+                            <li class="dropdown megamenu">
+                                <a href="{% url 'sqpages:home' %}">Home</a>
+                            </li>
+                            <li class="dropdown">
+                                <a  href="{% url 'sqblog:post_list' %}" >Blog</a>
+                            </li>
+                            <li><a href="https://wa.me/+2348162058213">Contact us </a></li>
+                        </ul>
+                    </div>
+                    <div class="main-menu__right">
+                        <a href="#" class="main-menu__toggler mobile-nav__toggler">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </header>

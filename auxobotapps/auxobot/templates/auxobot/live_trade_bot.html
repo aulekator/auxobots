@@ -1,0 +1,405 @@
+{% extends "frontend/dashboard-base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .custom-rounded {
+        border-radius: 1rem !important;
+        width: 100%;
+        padding: 13.5px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 16px;
+    }
+    .custom-rounded:focus {
+        border-color: #a0c4ff;
+        box-shadow: 0 0 0 0.25rem rgba(100, 150, 255, 0.25);
+    }
+
+    .terminal-log {
+        background-color: #1e1e1e;
+        color: #d4d4d4;
+        font-family: 'Courier New', Consolas, monospace;
+        font-size: 0.875rem;
+        line-height: 1.4;
+        max-height: 500px;
+        overflow-y: auto;
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid #333;
+    }
+    .log-info { color: #b0b0b0; }
+    .log-warn { color: #ffab00; }
+    .log-error { color: #ff5252; font-weight: bold; }
+    .log-success { color: #69f0ae; }
+    .log-timestamp { color: #666; font-size: 0.8rem; }
+
+    .metric-item {
+        padding: 16px 0;
+        border-bottom: 1px solid #eee;
+    }
+    .metric-item:last-child {
+        border-bottom: none;
+    }
+    .metric-label {
+        font-size: 0.875rem;
+        color: #666;
+        margin-bottom: 4px;
+    }
+    .metric-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="section-content-right">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="main-content-wrap">
+                <div class="tf-container">
+
+                    <!-- Header -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="d-flex justify-between align-items-center mb-32">
+                                <h4 class="mb-0" style="font-size: 14px;">Live Trading Dashboard</h4>
+                                <button class="tf-button style-1" data-bs-toggle="modal" data-bs-target="#configureBotModal" style="font-size: 12px;">
+                                    {% if live_bot_active %}Change Settings{% else %}Configure Bot{% endif %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-lg-8">
+                            <!-- Performance & Account Metrics -->
+                            <div class="wg-box style-1 bg-Gainsboro shadow-none mb-32">
+                                <div class="title mb-20">
+                                    <div class="label-01" style="font-size: 12px;">Live Performance & Account</div>
+                                </div>
+                                <div class="row g-4">
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="metric-item text-center text-md-start">
+                                            <div class="metric-label">USDT Margin Balance</div>
+                                            <div class="metric-value text-primary">${{ margin_balance|floatformat:4 }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="metric-item text-center text-md-start">
+                                            <div class="metric-label">Available Balance</div>
+                                            <div class="metric-value">${{ wallet_balance|floatformat:4 }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="metric-item text-center text-md-start">
+                                            <div class="metric-label">Unrealized PnL</div>
+                                            <div class="metric-value {% if unrealized_pnl >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                                {% if unrealized_pnl >= 0 %}+{% endif %}{{ unrealized_pnl|floatformat:4 }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="metric-item text-center text-md-start">
+                                            <div class="metric-label">Margin Ratio</div>
+                                            <div class="metric-value">{{ margin_ratio }}</div>
+                                            <small class="text-muted d-block mt-1">Maint: {{ maintenance_margin|floatformat:4 }} USDT</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="metric-item text-center text-md-start">
+                                            <div class="metric-label">Total PnL (Recorded)</div>
+                                            <div class="metric-value {% if total_pnl >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                                {% if total_pnl >= 0 %}+{% endif %}{{ total_pnl|floatformat:2 }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                        <div class="metric-item text-center text-md-start">
+                                            <div class="metric-label">Win Rate</div>
+                                            <div class="metric-value">{{ win_rate|floatformat:1 }}%</div>
+                                            <small class="text-muted d-block mt-1">{{ total_trades }} trades</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="metric-item text-center text-md-start">
+                                            <div class="metric-label">Current Trading Pair</div>
+                                            <div class="metric-value text-primary fw-semibold">{{ current_instrument_display }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Open Orders & Positions -->
+                            <div class="wg-box mb-32">
+                                <div class="title mb-12">
+                                    <div class="label-01">Live Orders & Positions</div>
+                                </div>
+                                <!-- Open Orders -->
+                                <div class="mb-32">
+                                    <h6 class="mb-3 fw-semibold">Open Orders ({{ open_orders|length }})</h6>
+                                    {% if open_orders %}
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-hover align-middle mb-0">
+                                                <thead class="text-muted small">
+                                                    <tr>
+                                                        <th>Side</th>
+                                                        <th>Type</th>
+                                                        <th>Price</th>
+                                                        <th>Quantity</th>
+                                                        <th>Filled</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for order in open_orders %}
+                                                    <tr>
+                                                        <td class="{% if order.side == 'BUY' %}text-success{% else %}text-danger{% endif %} fw-semibold">{{ order.side }}</td>
+                                                        <td>{{ order.type }}</td>
+                                                        <td>{% if order.price %}{{ order.price|floatformat:4 }}{% else %}<em class="text-muted">Market</em>{% endif %}</td>
+                                                        <td>{{ order.quantity|floatformat:3 }}</td>
+                                                        <td>{{ order.filled_qty|floatformat:3 }}</td>
+                                                        <td><span class="badge bg-warning text-dark small">{{ order.status }}</span></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <p class="text-muted small">No open orders.</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Open Positions -->
+                                <div>
+                                    <h6 class="mb-3 fw-semibold">Open Positions ({{ open_positions|length }})</h6>
+                                    {% if open_positions %}
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-hover align-middle mb-0">
+                                                <thead class="text-muted small">
+                                                    <tr>
+                                                        <th>Side</th>
+                                                        <th>Entry Price</th>
+                                                        <th>Quantity</th>
+                                                        <th>Unrealized PnL</th>
+                                                        <th>PnL %</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for pos in open_positions %}
+                                                    <tr class="{% if pos.unrealized_pnl >= 0 %}table-success{% else %}table-danger{% endif %}">
+                                                        <td class="{% if pos.side == 'LONG' %}text-success{% else %}text-danger{% endif %} fw-semibold">{{ pos.side }}</td>
+                                                        <td>{{ pos.avg_px_open|floatformat:4 }}</td>
+                                                        <td>{{ pos.quantity|floatformat:3 }}</td>
+                                                        <td class="fw-semibold">{% if pos.unrealized_pnl >= 0 %}+{% endif %}{{ pos.unrealized_pnl|floatformat:4 }}</td>
+                                                        <td class="fw-semibold">{% if pos.unrealized_pnl_pct >= 0 %}+{% endif %}{{ pos.unrealized_pnl_pct|floatformat:2 }}%</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <p class="text-muted small">No open positions.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Live Terminal Log -->
+                            <div class="wg-box mb-32">
+                                <div class="title mb-12 d-flex justify-content-between align-items-center">
+                                    <div class="label-01">Live Bot Terminal Log</div>
+                                    <a href="{% url 'auxobot:download_bot_logs' %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-download me-2"></i> Download CSV
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="col-lg-4">
+                            <!-- Recent Trade History -->
+                            <div class="wg-box mb-40" style="background-color: #EBF4FF;">
+                                <div class="title mb-12">
+                                    <div class="label-01">Recent Trade History</div>
+                                </div>
+                                {% if trade_history %}
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover align-middle mb-0">
+                                            <thead class="text-muted small">
+                                                <tr>
+                                                    <th>Time</th>
+                                                    <th>Side</th>
+                                                    <th>Price</th>
+                                                    <th>Qty</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for t in trade_history %}
+                                                <tr>
+                                                    <td class="small text-muted">{{ t.time|date:"H:i:s" }}</td>
+                                                    <td class="fw-semibold {% if t.side == 'BUY' %}text-success{% else %}text-danger{% endif %}">{{ t.side }}</td>
+                                                    <td>{{ t.price|floatformat:4 }}</td>
+                                                    <td>{{ t.qty|floatformat:3 }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="text-center text-Gray py-5">
+                                        <em>No recent trades yet.</em>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Bot Status & Controls -->
+                            <div class="wg-box">
+                                <div class="title mb-12">
+                                    <div class="label-01">Live Bot Status</div>
+                                </div>
+                                <div class="p-32 text-center">
+                                    {% if live_bot_active %}
+                                        <div class="mb-24">
+                                            <span class="badge bg-Success fs-5 px-5 py-3 rounded-pill">
+                                                <i class="fas fa-play-circle me-2"></i> BOT ACTIVE
+                                            </span>
+                                        </div>
+                                        <p class="mb-3 text-success fw-semibold">
+                                            Grid Strategy Running on {{ current_instrument_display }}
+                                        </p>
+                                        <p class="text-muted small mb-32">
+                                            Qty per Level: {{ config.custom_quantity|default:"1.000" }}
+                                        </p>
+                                        <form method="post" action="{% url 'auxobot:stop_live_bot' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="tf-button style-2 bg-Danger px-6 py-3 rounded-pill">
+                                                <i class="fas fa-stop me-2"></i> Stop Bot
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <div class="mb-24">
+                                            <span class="badge bg-Danger fs-5 px-5 py-3 rounded-pill">
+                                                <i class="fas fa-pause-circle me-2"></i> BOT STOPPED
+                                            </span>
+                                        </div>
+                                        <p class="mt-10 mb-20 text-muted">
+                                            The bot is not running.
+                                        </p>
+                                        <form method="post" action="{% url 'auxobot:start_live_bot' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="tf-button style-1 px-6 py-3 mb-3 w-100">
+                                                <i class="fas fa-play me-2"></i> Start Bot Now
+                                            </button>
+                                        </form>
+                                        <p class="text-muted small mt-3">
+                                            Or <a href="#" data-bs-toggle="modal" data-bs-target="#configureBotModal">configure settings</a> first
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Configuration Modal -->
+<div class="modal fade" id="configureBotModal" tabindex="-1" aria-labelledby="configureBotModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 overflow-hidden shadow-xl" style="border-radius: 1.5rem; backdrop-filter: blur(12px); background: rgba(255, 255, 255, 0.95);">
+            <div class="modal-header border-0 pb-0 pt-4">
+                <h5 class="modal-title h4 fw-bold text-dark" id="configureBotModalLabel">
+                    {% if live_bot_active %}
+                        <i class="fas fa-cog text-secondary me-3"></i> Change Bot Settings (Will Restart)
+                    {% else %}
+                        <i class="fas fa-tools text-secondary me-3"></i> Configure live Trading Bot
+                    {% endif %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-5 pb-4 px-4">
+                <form method="post" action="{% url 'auxobot:configure_live_bot' %}">
+                    {% csrf_token %}
+                    <!-- Your form fields here (same as before) -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold fs-5">Choose Venue (Exchange)</label>
+                        <select class="form-select form-select-lg custom-rounded shadow-sm" name="exchange" id="exchangeSelect" required>
+                            {% for value, label in exchanges %}
+                                <option value="{{ value }}" {% if config.exchange == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold fs-5">Live API Public Key</label>
+                        <input type="text" class="form-control form-control-lg custom-rounded shadow-sm" name="api_key"
+                               value="{% if config.api_key and config.api_key.strip %}********************************{% endif %}"
+                               placeholder="Binance  public key" autocomplete="off">
+                        <div class="form-text mt-2 text-muted">Binance public key.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold fs-5">Live API Secret Key</label>
+                        <input type="password" class="form-control form-control-lg custom-rounded shadow-sm" name="api_secret"
+                               value="{% if config.api_secret and config.api_secret.strip %}********************************{% endif %}"
+                               placeholder="Binance secret key" autocomplete="new-password">
+                    </div>
+
+                    <div id="binanceLiveFields" style="display: {% if config.exchange == 'binance' %}block{% else %}none{% endif %};" class="mb-4">
+                        <div class="alert alert-info rounded-4 p-3 border-0">
+                            <strong>Binance Active</strong> – Using keys is recommended.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold fs-5">Select Trading Pair</label>
+                        <select class="form-select form-select-lg custom-rounded shadow-sm" name="instrument" required>
+                            {% for value, label in instruments %}
+                                <option value="{{ value }}" {% if config.instrument == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label fw-semibold fs-5">Quantity per Grid Level</label>
+                        <input type="number" step="0.001" min="1.000" class="form-control form-control-lg custom-rounded shadow-sm"
+                               name="custom_quantity" value="{{ config.custom_quantity|default:'' }}"
+                               placeholder="Leave blank for default (1.000)">
+                        <div class="form-text mt-3 text-muted">
+                            Default: <strong>1.000</strong> (minimum allowed)
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-4 mt-5">
+                        <button type="button" class="btn btn-outline-secondary btn-lg px-5 rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-lg px-5 rounded-pill shadow" style="background-color: #EBF4FF; color: #1a1a1a; font-weight: 600;">
+                            <i class="fas fa-save me-2"></i> Save Settings {% if live_bot_active %} & Restart Bot{% else %} & Start Bot{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const exchangeSelect = document.getElementById('exchangeSelect');
+    const binanceFields = document.getElementById('binanceLiveFields');
+    if (exchangeSelect && binanceFields) {
+        exchangeSelect.addEventListener('change', () => {
+            binanceFields.style.display = exchangeSelect.value === 'binance' ? 'block' : 'none';
+        });
+    }
+
+    const terminalLog = document.getElementById('terminalLog');
+    if (terminalLog) {
+        terminalLog.scrollTop = terminalLog.scrollHeight;
+    }
+</script>
+{% endblock %}

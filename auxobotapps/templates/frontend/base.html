@@ -1,0 +1,92 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    {% block title %}
+        <title>{% block page_title %} Auxo trading bot {% endblock %}</title>
+    {% endblock %}
+	
+    {% block metas %}
+        <meta name="description" content="Auxo trading HTML Template">
+	    <meta name="keywords" content="">
+	    <meta name="author" content="Dmitry Volkov">
+    {% endblock %}
+
+    {% block extra_metas %} {% endblock %}
+
+    <!-- CSS -->
+	<link rel="stylesheet" href="{% static 'frontend/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'frontend/css/splide.min.css' %}">
+	<!-- <link rel="stylesheet" href="{% static 'frontend/css/css2.min.css' %}"> -->
+	<link rel="stylesheet" href="{% static 'frontend/css/main.css' %}">
+	<link rel="stylesheet" href="{% static 'frontend/css/extra.css' %}">
+	
+	<!-- Icon font -->
+	<link rel="stylesheet" href="{% static 'frontend/css/fontawesome-all.min.css' %}">
+
+    {% block extra_css %} {% endblock %}
+</head>
+
+<body class="body">
+    {% block navigation %}
+	    {% include 'frontend/layouts/header.html' %}
+	{% endblock %}
+
+    {% block content %}
+    {% endblock %}
+    
+	{% block footer %}
+        {% include 'frontend/layouts/footer.html' %}
+    {% endblock %}
+	<!-- ask modal -->
+	<div class="modal modal--auto fade" id="modal-ask" tabindex="-1" aria-labelledby="modal-ask" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal__content">
+					<button class="modal__close" type="button" data-bs-dismiss="modal" aria-label="Close"><i class="ti ti-x"></i></button>
+
+					<h4 class="modal__title">Ask a question</h4>
+
+					<p class="modal__text">Our support team is always on call, and ready to help with all your questions!</p>
+
+					<form action="#" class="modal__form">
+						<div class="form__group">
+							<input name="name" type="text" class="form__input" placeholder="Name">
+						</div>
+
+						<div class="form__group">
+							<input name="mail" type="text" class="form__input" placeholder="Email">
+						</div>
+
+						<div class="form__group">
+							<textarea name="question" class="form__textarea" placeholder="Your question"></textarea>
+						</div>
+
+						<button class="form__btn" type="button">Send</button>
+					</form>
+
+					<!-- design elements -->
+					<span class="screw screw--big-tl"></span>
+					<span class="screw screw--big-bl"></span>
+					<span class="screw screw--big-br"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end ask modal -->
+
+	<!-- JS -->
+	<script src="{% static 'frontend/js/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'frontend/js/jquery-migrate-3.0.0.min.js' %}"></script>
+	<script src="{% static 'frontend/js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'frontend/js/smooth-scrollbar.js' %}"></script>
+	<script src="{% static 'frontend/js/splide.min.js' %}"></script>
+	<script src="{% static 'frontend/js/three.min.js' %}"></script>
+	<script src="{% static 'frontend/js/vanta.fog.min.js' %}"></script>
+	<script src="{% static 'frontend/js/main.js' %}"></script>
+    {% block extra_js %} {% endblock %}
+</body>
+</html>

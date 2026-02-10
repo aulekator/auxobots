@@ -1,0 +1,217 @@
+{% extends 'frontend/base.html' %}
+{% load i18n static my_filters %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" crossorigin="anonymous">
+    <style>
+        .sq-btn {    
+            font-size: 13px;
+            font-weight: 800;
+            padding: 0px 0px 0px;
+            transition: 500ms;
+            overflow: hidden;
+            z-index: 2;
+            position: relative;
+            border-radius: 8px;
+        }
+        .ogency-btn:hover {
+            background: #0056b3;
+        }
+        .code-block-container {
+            position: relative;
+            margin: 20px 0;
+        }
+        .code-block-container pre {
+            background: #1d1f21;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        .traffic-lights {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 8px;
+        }
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+        .traffic-light.red {
+            background-color: #ff5f56;
+        }
+        .traffic-light.yellow {
+            background-color: #ffbd2e;
+        }
+        .traffic-light.green {
+            background-color: #28c940;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #031a6d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .copy-button:hover {
+            background-color: #6b73ec;
+        }
+        .copy-button.copied {
+            background-color: #28a745;
+        }
+        
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="stricky-header stricked-menu main-menu">
+        <div class="sticky-header__content"></div>
+    </div>
+    <section class="page-header">
+        <div class="page-header__bg"></div>
+        <div class="page-header__overlay"></div>
+        <div class="container">
+            <ul class="page-header__breadcrumb list-unstyled">
+                <li><a href="{% url 'sqpages:home' %}">Home</a></li>
+                <li><span>Blog</span></li>
+            </ul>
+            <h2 class="page-header__title">Blog details</h2>
+        </div>
+    </section>
+    <section class="blog-details">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-8 col-lg-7">
+                    <div class="blog-details__content">
+                        <div class="blog-details__img">
+                            {% if post.image %}
+                                <img src="{{ post.image.url }}" alt="{{ post.title|escape }}">
+                            {% else %}
+                                <img src="{% static 'sqstatic/assets/images/blog/blog-details.jpg' %}" alt="{{ post.title|escape }}">
+                            {% endif %}
+                            <span class="blog-details__img__date">{{ post.pub_date|date:"d M" }}</span>
+                        </div>
+                        <div class="blog-details__meta">
+                            {% if post.categories.all %}
+                                <a href="{% url 'sqblog:post_list_by_category' post.categories.first.slug %}">{{ post.categories.first.name }}</a>
+                            {% else %}
+                                <a href="#">Uncategorized</a>
+                            {% endif %}
+                            <span>.</span>{{ post.comments.count }} Comment{{ post.comments.count|pluralize }}
+                        </div>
+                        <h3 class="blog-details__title">{{ post.title }}</h3>
+                        <div class="blog-details__text">
+                            {{ post.content|clean_code|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="mobile-nav__wrapper">
+        <div class="mobile-nav__overlay mobile-nav__toggler"></div>
+        <div class="mobile-nav__content">
+            <span class="mobile-nav__close mobile-nav__toggler"><i class="fa fa-times"></i></span>
+            <div class="logo-box">
+                    <a href="{% url 'sqpages:home' %}">
+                    <span class="sq">Sq</span> <span class="ananlysis">- Ananlysis</span> <span class="dot">.</span>
+                </a>
+            </div>
+            <div class="mobile-nav__container"></div>
+            <ul class="mobile-nav__contact list-unstyled">
+                <li>
+                  <i  class="fab fa-whatsapp"  ></i>
+                    <a href="https://wa.me/+2348162058213" class="sq-btn">Contact us via WhatsApp</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <a href="#" class="scroll-top">
+        <svg class="scroll-top__circle" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </a>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js" crossorigin="anonymous"></script>
+    <script>
+    $(document).ready(function(){
+        // Prism code highlighting
+        if (typeof Prism !== 'undefined') {
+            Prism.highlightAll();
+            setTimeout(addCodeBlockButtons, 1000);
+        } else {
+            addCodeBlockButtons();
+        }
+
+        // Add traffic light buttons and copy button
+        function addCodeBlockButtons() {
+            const $preElements = $('pre').toArray();
+            $preElements.forEach((pre, index) => {
+                const $pre = $(pre);
+                const $code = $pre.find('code');
+                if ($code.length && !$pre.parent().hasClass('code-block-container')) {
+                    const $container = $('<div class="code-block-container"></div>');
+                    const $trafficLights = $('<div class="traffic-lights"></div>');
+                    const $redButton = $('<div class="traffic-light red"></div>');
+                    const $yellowButton = $('<div class="traffic-light yellow"></div>');
+                    const $greenButton = $('<div class="traffic-light green"></div>');
+                    const $copyButton = $('<button class="copy-button">Copy</button>');
+                    $trafficLights.append($redButton, $yellowButton, $greenButton);
+                    $pre.wrap($container);
+                    $pre.before($trafficLights);
+                    $pre.before($copyButton);
+
+                    $copyButton.click(function() {
+                        const codeText = $code.text();
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(codeText).then(() => {
+                                $copyButton.text('Copied!').addClass('copied');
+                                setTimeout(() => {
+                                    $copyButton.text('Copy').removeClass('copied');
+                                }, 2000);
+                            }).catch(err => {
+                                fallbackCopyText(codeText, $copyButton);
+                            });
+                        } else {
+                            fallbackCopyText(codeText, $copyButton);
+                        }
+                    });
+                }
+            });
+        }
+
+        function fallbackCopyText(text, $button) {
+            const $tempInput = $('<textarea>');
+            $('body').append($tempInput);
+            $tempInput.val(text).select();
+            try {
+                document.execCommand('copy');
+                $button.text('Copied!').addClass('copied');
+                setTimeout(() => {
+                    $button.text('Copy').removeClass('copied');
+                }, 2000);
+            } catch (err) {
+                alert("Failed to copy code. Please select and copy manually.");
+            }
+            $tempInput.remove();
+        }
+    });
+    </script>
+{% endblock %}

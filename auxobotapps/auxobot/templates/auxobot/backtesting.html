@@ -1,0 +1,299 @@
+{% extends "frontend/dashboard-base.html" %}
+{% load static %}
+
+{% block title %}Backtesting{% endblock %}
+
+{% block content %}
+<div class="section-content-right">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="main-content-wrap">
+                <div class="tf-container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="wg-box style-1 bg-Primary shadow-none mb-32">
+                                <div class="title mb-20">
+                                    <h4 class="text-White">Grid Strategy Backtesting</h4>
+                                </div>
+
+                                <form id="backtest-form" enctype="multipart/form-data">
+                                    {% csrf_token %}
+
+                                    <div class="row g-3">
+                                        <!-- Starting Balances -->
+                                        <div class="col-md-6">
+                                            <label class="form-label text-White">Starting USDT Balance</label>
+                                            <input type="number" step="0.01" class="form-control" name="usdt_balance" value="5000" required>
+                                            <small class="text-Gray">Initial margin in USDT</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label text-White">Starting SOL Amount</label>
+                                            <input type="number" step="0.001" class="form-control" name="sol_amount" value="0" required>
+                                            <small class="text-Gray">Optional initial SOL position (usually 0)</small>
+                                        </div>
+
+                                        <!-- Grid Price Range -->
+                                        <div class="col-md-6">
+                                            <label class="form-label text-White">Lower Grid Price</label>
+                                            <input type="number" step="0.01" class="form-control" name="lower_price" value="120.00" required>
+                                            <small class="text-Gray">Lowest buy level</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label text-White">Upper Grid Price</label>
+                                            <input type="number" step="0.01" class="form-control" name="upper_price" value="135.00" required>
+                                            <small class="text-Gray">Highest sell level</small>
+                                        </div>
+
+                                        <!-- Grid Levels -->
+                                        <div class="col-md-6">
+                                            <label class="form-label text-White">Grid Levels (each side)</label>
+                                            <input type="number" min="5" max="30" class="form-control" name="grid_levels" value="15" required>
+                                            <small class="text-Gray">15 levels = 30 total orders (15 buy + 15 sell)</small>
+                                        </div>
+
+                                        <!-- Risk per Grid Level -->
+                                        <div class="col-md-6">
+                                            <label class="form-label text-White">Risk per Grid Level (USDT)</label>
+                                            <input type="number" step="0.001" min="0.100" class="form-control" name="trade_size" value="1.000" required>
+                                            <small class="text-Gray">Fixed USDT notional per grid order (e.g., 1.000 USDT)</small>
+                                        </div>
+
+                                        <!-- Profit Target -->
+                                        <div class="col-md-6">
+                                            <label class="form-label text-White">Profit Target per Cycle (USDT)</label>
+                                            <input type="number" step="0.1" class="form-control" name="grid_profit" value="1.0" required>
+                                            <small class="text-Gray">How much profit to take when a grid level fills</small>
+                                        </div>
+
+                                        <!-- CSV Data File -->
+                                        <div class="col-12">
+                                            <label class="form-label text-White">Historical Data CSV</label>
+                                            <input type="file" class="form-control" name="csv_file" accept=".csv" required>
+                                            <small class="text-Gray">Required columns: timestamp, open, high, low, close, volume</small>
+                                        </div>
+
+                                        <div class="col-12 mt-32">
+                                            <button type="submit" class="tf-button style-1 bg-Success text-White w-100">
+                                                <i class="fas fa-play me-2"></i> Run Grid Backtest
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Modal -->
+<div class="modal fade" id="backtestResultsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-Primary">
+                <h5 class="modal-title text-White">Grid Strategy Backtest Results</h5>
+                <button type="button" class="btn-close text-White" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="results-content">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-Primary" role="status"></div>
+                    <p class="mt-3">Running backtest...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="tf-button" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    function markdownToListItems(markdownText) {
+        return markdownText
+            .split('\n')
+            .filter(line => line.trim().startsWith('-'))
+            .map(line => {
+                const text = line.trim().substring(2).trim();
+                return `<div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <span class="f14-regular">${text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-dark">$1</strong>')}</span>
+                        </div>`;
+            })
+            .join('');
+    }
+
+    document.getElementById('backtest-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const modal = new bootstrap.Modal(document.getElementById('backtestResultsModal'));
+        const resultsContent = document.getElementById('results-content');
+
+        resultsContent.innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border text-Primary" style="width: 4rem; height: 4rem;" role="status"></div>
+                <p class="mt-4 fs-4 text-Primary">Running Grid Strategy backtest...</p>
+            </div>
+        `;
+        modal.show();
+
+        fetch('{% url "auxobot:run_backtest" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const metrics = data.metrics;
+
+                const startBalance = metrics.starting_balance;
+                const endBalance = metrics.ending_balance;
+                const totalReturn = metrics.total_return_percent.toFixed(2);
+                const totalPnl = metrics.total_pnl.toFixed(2);
+                const winRate = metrics.win_rate_percent.toFixed(1);
+                const riskPerTrade = metrics.risk_per_trade_usdt || 1.000;
+                const isPositive = metrics.total_pnl >= 0;
+
+                resultsContent.innerHTML = `
+                    <div class="row g-4">
+                        <!-- Backtest Summary -->
+                        <div class="col-12">
+                            <div class="wg-box gap16">
+                                <div class="title mb-12">
+                                    <div class="label-01">Backtest Summary</div>
+                                </div>
+                                <div class="f14-regular">
+                                    ${markdownToListItems(data.summary)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Equity Curve Chart -->
+                        <div class="col-12">
+                            <div class="wg-box p-4" style="background: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                                <h5 class="mb-4 text-dark fw-bold">Equity Curve</h5>
+                                <canvas id="equityChart" height="120"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Quick Metric Cards -->
+                        <div class="col-md-4">
+                            <div class="wg-box text-center p-4" style="background-color: #F6FF99; border-radius: 16px;">
+                                <h6 class="fw-bold ${isPositive ? 'text-success' : 'text-danger'}">Total Return</h6>
+                                <h3 class="mt-2 mb-0 text-dark">${isPositive ? '+' : ''}${totalReturn}%</h3>
+                                <small class="text-muted">$${Math.abs(totalPnl).toFixed(2)} ${isPositive ? 'profit' : 'loss'}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="wg-box text-center p-4" style="background-color: #FAF8F1; border-radius: 16px;">
+                                <h6 class="fw-bold text-primary">Win Rate</h6>
+                                <h3 class="mt-2 mb-0 text-dark">${winRate}%</h3>
+                                <small class="text-muted">${metrics.total_trades} total trades</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="wg-box text-center p-4" style="background-color: #EBF4FF; border-radius: 16px;">
+                                <h6 class="fw-bold text-info">Risk per Level</h6>
+                                <h3 class="mt-2 mb-0 text-dark">$${riskPerTrade.toFixed(3)}</h3>
+                                <small class="text-muted">Fixed USDT per grid order</small>
+                            </div>
+                        </div>
+
+                        <!-- Account Overview -->
+                        <div class="col-lg-6">
+                            <div class="wg-box gap16" style="background-color: #EBF4DD; border-radius: 12px;">
+                                <div class="title mb-12">
+                                    <div class="label-01">Account Overview</div>
+                                </div>
+                                <div class="f14-regular">
+                                    ${markdownToListItems(data.account_report)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance Metrics -->
+                        <div class="col-lg-6">
+                            <div class="wg-box gap16" style="background-color: #F6F0D7; border-radius: 12px;">
+                                <div class="title mb-12">
+                                    <div class="label-01">Performance Metrics</div>
+                                </div>
+                                <div class="f14-regular">
+                                    ${markdownToListItems(data.performance_report)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Equity Curve Chart
+                const ctx = document.getElementById('equityChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Start', '25%', '50%', '75%', 'End'],
+                        datasets: [{
+                            label: 'Account Balance (USDT)',
+                            data: [
+                                startBalance,
+                                startBalance + (endBalance - startBalance) * 0.25,
+                                startBalance + (endBalance - startBalance) * 0.5,
+                                startBalance + (endBalance - startBalance) * 0.75,
+                                endBalance
+                            ],
+                            borderColor: isPositive ? '#28a745' : '#dc3545',
+                            backgroundColor: isPositive ? 'rgba(40, 167, 69, 0.15)' : 'rgba(220, 53, 69, 0.15)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: isPositive ? '#28a745' : '#dc3545',
+                            pointRadius: 6,
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => 'Balance: $' + context.parsed.y.toFixed(2)
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: { callback: (value) => '$' + Number(value).toLocaleString() },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+
+            } else {
+                resultsContent.innerHTML = `
+                    <div class="alert alert-danger rounded p-4">
+                        <strong>Error:</strong> ${data.error || 'Unknown error occurred'}
+                    </div>
+                `;
+            }
+        })
+        .catch(err => {
+            console.error('Backtest request failed:', err);
+            resultsContent.innerHTML = `
+                <div class="alert alert-danger rounded p-4">
+                    <strong>Request failed:</strong> Please try again.
+                </div>
+            `;
+        });
+    });
+</script>
+{% endblock %}

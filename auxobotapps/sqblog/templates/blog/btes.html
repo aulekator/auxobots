@@ -1,0 +1,208 @@
+{% extends 'frontend/base.html' %}
+{% load i18n static my_filters %}
+
+        <div class="stricky-header stricked-menu main-menu">
+            <div class="sticky-header__content"></div><!-- /.sticky-header__content -->
+        </div><!-- /.stricky-header -->
+        <section class="page-header">
+            <div class="page-header__bg"></div>
+            <!-- /.page-header__bg -->
+            <div class="page-header__overlay"></div>
+            <!-- /.page-header__bg -->
+            <div class="container">
+                <ul class="page-header__breadcrumb list-unstyled">
+                    <li><a href="index.html">Home</a></li>
+                    <li><span>Blog</span></li>
+                </ul><!-- /.page-breadcrumb list-unstyled -->
+                <h2 class="page-header__title">Blog details</h2><!-- /.page-title -->
+            </div><!-- /.container -->
+        </section><!-- /.page-header -->
+        <!--Blog Start-->
+        <section class="blog-details">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="blog-details__content">
+                            <div class="blog-details__img">
+                                <img src="assets/images/blog/blog-details-1.jpg" alt="ogency" />
+                                <span class="blog-details__img__date">16 apr</span>
+                            </div><!-- details-image -->
+                            <div class="blog-details__meta"><a href="blog-details.html">Design</a><span>.</span>2 Comments</div><!-- /.details-meta -->
+                            <h3 class="blog-details__title">Trending web code settings for a nice portfolio</h3><!-- details-tiele -->
+                            <p class="blog-details__text">
+                                There are many variations of passages of Lorem Ipsum available, but majority have suffered alteration in some form, by injected humour,
+                                or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum. There are many
+                                variations of passages of Lorem Ipsum available, but majority have suffered alteration in some form, by injected humour,
+                                or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum.
+                                There are many variations of passages of Lorem Ipsum available, but majority have suffered alteration in some form,
+                                by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage
+                                of Lorem Ipsum. Suspendisse ultricies vestibulum vehicula. Proin laoreet porttitor lacus. Duis auctor vel ex eu elementum.
+                                Fusce eu volutpat felis. Proin sed eros tincidunt, sagittis sapien eu, porta diam. Aenean finibus scelerisque nulla non facilisis.
+                                Fusce vel orci sed quam gravida condimentum. Aliquam condimentum, massa vel mollis volutpat, erat sem pharetra quam, ac mattis arcu
+                                elit non massa. Nam mollis nunc velit, vel varius arcu fringilla tristique. Cras elit nunc, sagittis eu bibendum eu, ultrices
+                                placerat sem. Praesent vitae metus dolor. Nulla a erat et orci mattis auctor.
+                            </p>
+                            <p class="blog-details__text">
+                                Mauris non dignissim purus, ac commodo diam. Donec sit amet lacinia nulla. Aliquam quis purus in justo pulvinar tempor.
+                                Aliquam tellus nulla, sollicitudin at euismod nec, feugiat at nisi. Quisque vitae odio nec lacus interdum tempus.
+                                Phasellus a rhoncus erat. Vivamus vel eros vitae est aliquet pellentesque vitae et nunc.
+                                Sed vitae leo vitae nisl pellentesque semper.
+                            </p>
+                        </div><!-- details-content -->
+                        <div class="blog-details__bottom">
+                            <div class="blog-details__tags">
+                                <h5 class="blog-details__tags__title">Tags</h5>
+                                <a href="blog-grid-left.html">Marketing</a>
+                                <a href="blog-grid-right.html">development</a>
+                            </div>
+                            <div class="blog-details__social">
+                                <a href="https://www.google.com/"><i class="fab fa-twitter"></i></a>
+                                <a href="https://www.google.com/"><i class="fab fa-facebook"></i></a>
+                                <a href="https://www.google.com/"><i class="fab fa-pinterest-p"></i></a>
+                                <a href="https://www.google.com/"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div><!-- details-tags-share -->
+                        <div class="blog-details__pagenation">
+                            <div class="blog-details__item">
+                                <div class="blog-details__item__img">
+                                    <img src="assets/images/blog/blog-details-pagenation-img-1.jpg" alt="">
+                                </div>
+                                <div class="blog-details__pagenation__content">
+                                    <p class="blog-details__pagenation__date">20 Mar, 2023</p>
+                                    <h4 class="blog-details__pagenation__title"><a href="blog-details-left.html">Get deep knowledge<br> of your audience</a></h4>
+                                </div>
+                            </div>
+                            <div class="blog-details__item blog-details__item-right">
+                                <div class="blog-details__pagenation__content">
+                                    <p class="blog-details__pagenation__date">20 Mar, 2023</p>
+                                    <h4 class="blog-details__pagenation__title"><a href="blog-details-right.html">How to ensure direct <br> designing hassle</a></h4>
+                                </div>
+                                <div class="blog-details__item__img">
+                                    <img src="assets/images/blog/blog-details-pagenation-img-2.jpg" alt="">
+                                </div>
+                            </div>
+                        </div><!-- details-pagination -->
+                        <div class="blog-details__comment">
+                            <h3 class="blog-details__comment__title">2 comments</h3>
+                            <div class="blog-details__comment__item">
+                                <div class="blog-details__comment__image">
+                                    <img src="assets/images/blog/comment-1-1.jpg" alt="ogency">
+                                </div>
+                                <div class="blog-details__comment__content">
+                                    <h3 class="blog-details__comment__name">Kevin martin</h3>
+                                    <p class="blog-details__comment__text">
+                                        Mauris non dignissim purus, ac commodo diam. Donec sit amet lacinia
+                                        nulla. Aliquam quis purus in justo pulvinar tempor. Aliquam tellus
+                                        nulla, sollicitudin at euismod.
+                                    </p>
+                                    <a href="blog-details.html" class="ogency-btn">Reply</a>
+                                </div>
+                            </div>
+                            <div class="blog-details__comment__item">
+                                <div class="blog-details__comment__image">
+                                    <img src="assets/images/blog/comment-1-2.jpg" alt="ogency">
+                                </div>
+                                <div class="blog-details__comment__content">
+                                    <h3 class="blog-details__comment__name">Sarah albert</h3>
+                                    <p class="blog-details__comment__text">
+                                        Mauris non dignissim purus, ac commodo diam. Donec sit amet lacinia
+                                        nulla. Aliquam quis purus in justo pulvinar tempor. Aliquam tellus
+                                        nulla, sollicitudin at euismod.
+                                    </p>
+                                    <a href="blog-details.html" class="ogency-btn">Reply</a>
+                                </div>
+                            </div>
+                        </div><!-- details-comment -->
+                        <div class="blog-details__comment-form">
+                            <h3 class="blog-details__comment-form__title">Leave a comment</h3>
+                            <form action="https://bracketweb.com/ogency-html-main/assets/inc/sendemail.php" class="contact-form-validated" novalidate="novalidate">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="blog-details__comment-form__input-box">
+                                            <input type="text" placeholder="Your name" name="name">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="blog-details__comment-form__input-box">
+                                            <input type="email" placeholder="Email address" name="email">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="blog-details__comment-form__input-box">
+                                            <textarea name="message" placeholder="Write  a comment"></textarea>
+                                        </div>
+                                        <button type="submit" class="ogency-btn">Submit Comment</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="result"></div>
+                        </div><!-- details-comment-form -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Blog End-->
+ 
+
+    </div><!-- /.page-wrapper -->
+
+
+    <div class="mobile-nav__wrapper">
+        <div class="mobile-nav__overlay mobile-nav__toggler"></div>
+        <!-- /.mobile-nav__overlay -->
+        <div class="mobile-nav__content">
+            <span class="mobile-nav__close mobile-nav__toggler"><i class="fa fa-times"></i></span>
+            <div class="logo-box">
+                <a href="index.html" aria-label="logo image"><img src="assets/images/logo-light.png" width="36" alt="ogency" /></a>
+            </div>
+            <!-- /.logo-box -->
+            <div class="mobile-nav__container"></div>
+            <!-- /.mobile-nav__container -->
+            <ul class="mobile-nav__contact list-unstyled">
+                <li>
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:needhelp@packageName__.com">needhelp@finlon.com</a>
+                </li>
+                <li>
+                    <i class="icon-phone-call"></i>
+                    <a href="tel:666-888-0000">666 888 0000</a>
+                </li>
+            </ul><!-- /.mobile-nav__contact -->
+            <div class="mobile-nav__social">
+                <a href="https://twitter.com/"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.facebook.com/"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.pinterest.com/"><i class="fab fa-pinterest-p"></i></a>
+                <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+            </div><!-- /.mobile-nav__social -->
+        </div>
+        <!-- /.mobile-nav__content -->
+    </div>
+    <!-- /.mobile-nav__wrapper -->
+
+
+    <div class="search-popup">
+        <div class="search-popup__overlay search-toggler"></div>
+        <!-- /.search-popup__overlay -->
+        <div class="search-popup__content">
+            <form action="#">
+                <label for="search" class="sr-only">search here</label><!-- /.sr-only -->
+                <input type="text" id="search" placeholder="Search Here..." />
+                <button type="submit" aria-label="search submit" class="ogency-btn">
+                    <i class="icon-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+        <!-- /.search-popup__content -->
+    </div>
+    <!-- /.search-popup -->
+
+    <!-- back-to-top-start -->
+    <a href="#" class="scroll-top">
+        <svg class="scroll-top__circle" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </a>
+    
+{% endblock %}

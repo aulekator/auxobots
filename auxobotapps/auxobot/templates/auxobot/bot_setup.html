@@ -1,0 +1,366 @@
+{% extends "frontend/dashboard-base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    /* ==================== FORM SPACING & STYLE ==================== */
+    .setup-form .form-group {
+        margin-bottom: 2.6rem;
+    }
+    .mtx{
+        margin-bottom: 2.6rem;
+    }
+
+    .setup-form label {
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        color: #2d3436;
+        font-size: 1.05rem;
+    }
+
+    .setup-form .form-control,
+    .setup-form .form-select {
+        padding: 0.925rem 1.1rem;
+        font-size: 1.05rem;
+        border-radius: 12px;
+        border: 1px solid #ced4da;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .setup-form .form-control:focus,
+    .setup-form .form-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+
+    .setup-form .form-text {
+        margin-top: 0.8rem;
+        font-size: 0.95rem;
+        color: #636e72;
+    }
+
+    /* ==================== COMPACT & MATURE BLACK/GREY TOGGLE ==================== */
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 320px;
+        height: 54px; /* Reduced height for compactness */
+        max-width: 100%;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #f1f3f5;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 54px;
+        border: 2px solid #e9ecef;
+        overflow: hidden;
+        box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .slider-inner {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        background-color: #212529;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        left: 0;
+        border-radius: 52px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    }
+
+    input:checked + .slider .slider-inner {
+        left: 50%;
+        background-color: #343a40;
+    }
+
+    input:checked + .slider {
+        background-color: #f8f9fa;
+        border-color: #adb5bd;
+    }
+
+    .slider-label {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-weight: 700;
+        font-size: 1rem; /* Slightly smaller text */
+        transition: all 0.4s ease;
+        width: 50%;
+        text-align: center;
+        z-index: 1;
+        color: #6c757d;
+        padding: 0 12px;
+        line-height: 1.3;
+    }
+
+    .slider-label-live { left: 0; }
+    .slider-label-demo { right: 0; }
+
+    input:not(:checked) + .slider .slider-label-live,
+    input:checked + .slider .slider-label-demo {
+        color: white;
+        font-weight: 800;
+    }
+
+    input:checked + .slider .slider-label-live,
+    input:not(:checked) + .slider .slider-label-demo {
+        color: #868e96;
+    }
+
+    /* ==================== MOBILE RESPONSIVENESS ==================== */
+    @media (max-width: 576px) {
+        .toggle-switch {
+            width: 290px;
+            height: 52px;
+        }
+        .slider-label {
+            font-size: 0.95rem;
+        }
+        .setup-form .form-group {
+            margin-bottom: 2.2rem;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .toggle-switch {
+            width: 270px;
+            height: 58px;
+        }
+        .slider-label {
+            font-size: 0.92rem;
+            padding: 0 10px;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .toggle-switch {
+            width: 250px;
+            height: 64px; /* Only increases height if needed */
+        }
+        .slider-label {
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="section-content-right">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="main-content-wrap">
+                <div class="tf-container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-xl-7">
+                            <div class="wg-box p-5 shadow" style="background-color: #EBF4FF; border-radius: 16px;">
+                                <h3 class="text-center mb-5">
+                                    <i class="fas fa-robot fa-2x me-3" style="color: #161326;"></i>
+                                    Trading Bot Setup
+                                </h3>
+
+                                <div class="alert alert-warning rounded-4 p-4 mb-5">
+                                    <strong>Security First:</strong> 
+                                    Always create a new API key with <strong>Trading enabled</strong> but 
+                                    <strong>Withdrawals DISABLED</strong>.
+                                </div>
+
+                                <!-- Live / Demo Toggle - Compact with Bottom Margin -->
+                                <div class="text-center mtx"> <!-- This mb-5 adds generous bottom margin -->
+                                    <div class="d-inline-block position-relative">
+                                        <label class="toggle-switch" aria-label="Switch between Live and Demo mode">
+                                            <input type="checkbox" id="modeToggle" {% if is_demo %}checked{% endif %}>
+                                            <span class="slider rounded-pill">
+                                                <span class="slider-inner"></span>
+                                                <span class="slider-label slider-label-live">Live Trading</span>
+                                                <span class="slider-label slider-label-demo">Demo Trading</span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="mt-5 fw-bold fs-4 text-dark" id="modeLabel">
+                                        <i class="fas fa-exchange-alt me-3 text-secondary"></i>
+                                        {% if is_demo %}
+                                            Demo Mode
+                                            <div class="text-muted fs-6 mt-2 fw-normal">
+                                                Testnet / Paper Trading – No Real Funds at Risk
+                                            </div>
+                                        {% else %}
+                                            Live Mode
+                                            <div class="text-muted fs-6 mt-2 fw-normal">
+                                                Real Funds Active – Trade with Caution
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Unified Form -->
+                                <form method="post" action="{% url 'auxobot:bot_setup' %}" class="setup-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="mode" id="modeInput" value="{% if is_demo %}demo{% else %}live{% endif %}">
+
+                                    <div class="form-group">
+                                        <label class="form-label fw-bold fs-5">Exchange</label>
+                                        <select class="form-select form-select-lg custom-rounded shadow-sm" name="exchange" required>
+                                            {% for value, label in exchanges %}
+                                                <option value="{{ value }}" {% if current_exchange == value %}selected{% endif %}>{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold fs-5" id="apiKeyLabel">
+                                                    {% if is_demo %}Demo API Public Key{% else %}Live API Public Key{% endif %}
+                                                </label>
+                                                <input type="text" 
+                                                       class="form-control form-control-lg custom-rounded shadow-sm"
+                                                       name="api_key"
+                                                       value="{% if current_api_key %}********************************{% endif %}"
+                                                       placeholder="{% if is_demo %}Binance Testnet public key (optional){% else %}Binance live public key{% endif %}"
+                                                       autocomplete="off">
+                                                {% if is_demo %}
+                                                    <div class="form-text text-muted">Optional for demo mode</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label fw-bold fs-5" id="apiSecretLabel">
+                                                    {% if is_demo %}Demo API Secret Key{% else %}API Secret Key{% endif %}
+                                                </label>
+                                                <input type="password"
+                                                       class="form-control form-control-lg custom-rounded shadow-sm"
+                                                       name="api_secret"
+                                                       value="{% if current_api_secret %}********************************{% endif %}"
+                                                       placeholder="{% if is_demo %}Binance Testnet secret (optional){% else %}Binance live secret{% endif %}"
+                                                       autocomplete="new-password">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div id="binanceHint" class="alert alert-info rounded-4 p-4" style="display: {% if current_exchange == 'binance' %}block{% else %}none{% endif %};">
+                                            <strong>{% if is_demo %}Binance Testnet{% else %}Binance Live{% endif %}</strong> – 
+                                            {% if is_demo %}Paper trading enabled. No real funds at risk.{% else %}Real trading active. Use cautiously.{% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label fw-bold fs-5">Trading Pair</label>
+                                        <select class="form-select form-select-lg custom-rounded shadow-sm" name="instrument" required>
+                                            {% for value, label in instruments %}
+                                                <option value="{{ value }}" {% if current_instrument == value %}selected{% endif %}>{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label fw-bold fs-5">Quantity per Grid Level</label>
+                                        <input type="number" step="0.001" 
+                                               min="{% if is_demo %}0.100{% else %}0.040{% endif %}"
+                                               class="form-control form-control-lg custom-rounded shadow-sm"
+                                               name="custom_quantity"
+                                               value="{{ current_quantity|default:'' }}"
+                                               placeholder="Default: {% if is_demo %}1.000{% else %}0.040{% endif %}">
+                                        <div class="form-text text-muted">
+                                            Default: <strong>{% if is_demo %}1.000 (safe for demo){% else %}0.040 (recommended){% endif %}</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="tf-button btn-lg px-6 py-3">
+                                            {% if is_demo %}
+                                                <i class="fas fa-play me-2"></i> Save & Start Demo Bot
+                                            {% else %}
+                                                <i class="fas fa-save me-2"></i> Save & Activate Live Bot
+                                            {% endif %}
+                                        </button>
+                                    </div>
+
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %} mt-4 text-center rounded-4 py-3">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </form>
+
+                                <div class="text-center mt-5">
+                                    <a href="{% url 'auxobot:dashboard' %}" class="btn btn-outline-secondary px-5 py-2">
+                                        ← Back to Dashboard
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const toggle = document.getElementById('modeToggle');
+    const modeInput = document.getElementById('modeInput');
+    const modeLabel = document.getElementById('modeLabel');
+    const apiKeyLabel = document.getElementById('apiKeyLabel');
+    const apiSecretLabel = document.getElementById('apiSecretLabel');
+    const exchangeSelect = document.querySelector('select[name="exchange"]');
+    const binanceHint = document.getElementById('binanceHint');
+
+    function updateUI(isDemo) {
+        modeInput.value = isDemo ? 'demo' : 'live';
+
+        if (isDemo) {
+            apiKeyLabel.textContent = 'Demo API Public Key';
+            apiSecretLabel.textContent = 'Demo API Secret Key';
+            document.querySelector('input[name="api_key"]').placeholder = 'Binance Testnet public key (optional)';
+            document.querySelector('input[name="api_secret"]').placeholder = 'Binance Testnet secret (optional)';
+            document.querySelector('input[name="custom_quantity"]').min = '0.100';
+            binanceHint.innerHTML = '<strong>Binance Testnet</strong> – Paper trading enabled. No real funds at risk.';
+        } else {
+            apiKeyLabel.textContent = 'Live API Public Key';
+            apiSecretLabel.textContent = 'API Secret Key';
+            document.querySelector('input[name="api_key"]').placeholder = 'Binance live public key';
+            document.querySelector('input[name="api_secret"]').placeholder = 'Binance live secret';
+            document.querySelector('input[name="custom_quantity"]').min = '0.040';
+            binanceHint.innerHTML = '<strong>Binance Live</strong> – Real trading active. Use cautiously.';
+        }
+
+        modeLabel.innerHTML = `
+            <i class="fas fa-exchange-alt me-3 text-secondary"></i>
+            ${isDemo ? 'Demo Mode' : 'Live Mode'}
+            <div class="text-muted fs-6 mt-2 fw-normal">
+                ${isDemo ? 'Testnet / Paper Trading – No Real Funds at Risk' : 'Real Funds Active – Trade with Caution'}
+            </div>
+        `;
+    }
+
+    toggle.addEventListener('change', function() {
+        updateUI(this.checked);
+    });
+
+    exchangeSelect.addEventListener('change', function() {
+        binanceHint.style.display = this.value === 'binance' ? 'block' : 'none';
+    });
+
+    // Initial setup
+    updateUI(toggle.checked);
+    binanceHint.style.display = exchangeSelect.value === 'binance' ? 'block' : 'none';
+</script>
+{% endblock %}

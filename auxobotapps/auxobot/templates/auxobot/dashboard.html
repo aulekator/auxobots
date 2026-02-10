@@ -1,0 +1,254 @@
+{% extends "frontend/dashboard-base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .card-link:hover {
+        color: inherit;
+        background: transparent;
+        text-decoration: none;
+    }
+
+    .card-link h6 {
+        color: inherit !important;
+    }
+    .rounded-4{
+        border-radius: 12px;
+    }
+
+    /* Mobile text size reduction */
+    @media (max-width: 576px) {
+        .card-link h6.counter {
+            font-size: 1.2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="section-content-right">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="main-content-wrap">
+                <div class="tf-container">
+                    <div class="row">
+                        <!-- Left Column: Navigation Cards + Performance -->
+                        <div class="col-lg-6">
+                            <div class="flex gap24 mb-32 flex-md-row flex-column">
+                                <div class="w-100">
+                                    <a href="{% url 'auxobot:backtest' %}" class="card-link">
+                                        <div class="wg-card style-1 bg-Primary mb-25">
+                                            <div class="icon">
+                                                <i class="fas fa-chart-area fa-3x text-White"></i>
+                                            </div>
+                                            <div class="content">
+                                                <h6 class="counter " style="color: white !important;">Backtesting</h6>
+                                                <div class="customchart-small"><div id=""></div></div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="{% url 'auxobot:demo_trading' %}" class="card-link">
+                                        <div class="wg-card mb-25">
+                                            <div class="icon">
+                                                <i class="fas fa-vr-cardboard fa-2x" style="color: #161326;"></i>
+                                            </div>
+                                            <div class="content">
+                                                <h6 class="counter">Demo Trading</h6>
+                                                <div class="customchart-small"><div id=""></div></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="w-100">
+                                    <a href="{% url 'auxobot:live_trading' %}" class="card-link">
+                                        <div class="wg-card mb-25">
+                                            <div class="icon">
+                                                <i class="fas fa-chart-line fa-2x" style="color: #161326;"></i>
+                                            </div>
+                                            <div class="content">
+                                                <h6 class="counter">Live Trading</h6>
+                                                <div class="customchart-small"><div id=""></div></div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="{% url 'auxobot:bot_setup' %}" class="card-link">
+                                        <div class="wg-card style-1" style="background-color: #EBF4FF;">
+                                            <div class="icon">
+                                                <i class="fas fa-robot fa-3x" style="color: #161326;"></i>
+                                            </div>
+                                            <div class="content">
+                                                <h6 class="counter">Bot Setup</h6>
+                                                <div class="customchart-small"><div id=""></div></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Key Performance Metrics Summary (Spacious & Professional) -->
+                            <div class="wg-box style-1 bg-Gainsboro shadow-none mb-32">
+                                <div class="title mb-20">
+                                    <div class="label-01">Key Performance Metrics Summary</div>
+                                </div>
+
+                                <div class="row g-4"> <!-- Bootstrap grid with proper spacing -->
+                                    <!-- Total Realized PnL -->
+                                    <div class="col-md-6 col-12">
+                                        <div class="text-center text-md-start p-4 bg-white rounded-4 shadow-sm h-100 d-flex flex-column justify-content-between">
+                                            <div class="f12-medium text-Gray mb-3">Total Realized PnL</div>
+                                            <div class="h2 fw-bold {% if total_realized_pnl >= 0 %}text-Success{% else %}text-Danger{% endif %} mb-2">
+                                                {% if total_realized_pnl >= 0 %}+{% endif %}${{ total_realized_pnl|floatformat:2 }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Win Rate -->
+                                    <div class="col-md-6 col-12">
+                                        <div class="text-center text-md-start p-4 bg-white rounded-4 shadow-sm h-100 d-flex flex-column justify-content-between">
+                                            <div class="f12-medium text-Gray mb-3">Win Rate</div>
+                                            <div class="h2 fw-bold text-gr mb-2">{{ win_rate|floatformat:1 }}%</div>
+                                            <div class="f12-regular text-muted">
+                                                {{ total_trades }} trade{{ total_trades|pluralize }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Total Trades -->
+                                    <div class="col-md-6 col-12">
+                                        <div class="text-center text-md-start p-4 bg-white rounded-4 shadow-sm h-100 d-flex flex-column justify-content-between">
+                                            <div class="f12-medium text-Gray mb-3">Total Trades</div>
+                                            <div class="h2 fw-bold mb-2">{{ total_trades }}</div>
+                                            <div class="f12-regular text-muted small">
+                                                {% if live_trades_count %}
+                                                    <span class="text-success">Live: {{ live_trades_count }}</span>
+                                                {% endif %}
+                                                {% if demo_trades_count %}
+                                                    {% if live_trades_count %} • {% endif %}
+                                                    <span class="text-info">Demo: {{ demo_trades_count }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Active Bots -->
+                                    <div class="col-md-6 col-12">
+                                        <div class="text-center text-md-start p-4 bg-white rounded-4 shadow-sm h-100 d-flex flex-column justify-content-between">
+                                            <div class="f12-medium text-Gray mb-3">Active Bots</div>
+                                            <div class="h2 fw-bold mb-3">{{ active_bots_count|default:"0" }}</div>
+                                            <div class="d-flex justify-content-center justify-content-md-start gap-4 flex-wrap">
+                                                <span class="badge {% if live_bot_active %}bg-Success{% else %}bg-secondary{% endif %} py-2 px-4">
+                                                    Live {% if live_bot_active %}Running{% else %}Stopped{% endif %}
+                                                </span>
+                                                <span class="badge {% if demo_bot_active %}bg-Info{% else %}bg-secondary{% endif %} py-2 px-4">
+                                                    Demo {% if demo_bot_active %}Running{% else %}Stopped{% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: PnL Chart + Positions + Recent Trades -->
+                        <div class="col-lg-6">
+
+                            <!-- Trading Bot PnL Chart -->
+                            <div class="wg-box style-1 bg-Primary shadow-none mb-32">
+                                <div class="title mb-10">
+                                    <div class="label-01 text-White">Trading Bot PnL (All Time)</div>
+                                </div>
+                                <div id="line-chart-twoline" class="line-chart-twoline" style="height: 280px;"></div>
+                            </div>
+
+                            <div class="flex gap24 mb-32 flex-md-row flex-column">
+                                <!-- Open Positions -->
+                                <div class="wg-box gap16 flex-1">
+                                    <div class="title mb-12">
+                                        <div class="label-01">Open Positions</div>
+                                    </div>
+
+                                    {% if open_positions %}
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-hover">
+                                                <thead class="text-muted small">
+                                                    <tr>
+                                                        <th>Side</th>
+                                                        <th>Qty</th>
+                                                        <th>Entry</th>
+                                                        <th>Unrealized</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for pos in open_positions %}
+                                                    <tr class="{% if pos.unrealized_pnl >= 0 %}table-success{% else %}table-danger{% endif %}">
+                                                        <td class="fw-bold {% if pos.side == 'LONG' %}text-success{% else %}text-danger{% endif %}">
+                                                            {{ pos.side }}
+                                                        </td>
+                                                        <td>{{ pos.quantity|floatformat:3 }}</td>
+                                                        <td>{{ pos.avg_px_open|floatformat:4 }}</td>
+                                                        <td class="fw-bold">
+                                                            {% if pos.unrealized_pnl >= 0 %}+{% endif %}{{ pos.unrealized_pnl|floatformat:2 }}
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <p class="text-muted text-center py-4">No open positions</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Recent Trade History -->
+                                <div class="wg-box gap16 flex-1" style="background-color: #EBF4FF;">
+                                    <div class="title mb-12">
+                                        <div class="label-01">Recent Trades</div>
+                                    </div>
+
+                                    {% if recent_trades %}
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-hover">
+                                                <thead class="text-muted small">
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th>Pair</th>
+                                                        <th>PnL</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for trade in recent_trades %}
+                                                    <tr>
+                                                        <td class="small text-muted">
+                                                            {{ trade.timestamp|time:"H:i" }}
+                                                        </td>
+                                                        <td>{{ trade.instrument }}</td>
+                                                        <td class="{% if trade.side == 'SELL' %}text-success{% else %}text-danger{% endif %} fw-bold">
+                                                            {% if trade.side == 'SELL' %}+{% endif %}${{ trade.realized_pnl|default:"0.00"|floatformat:2 }}
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <p class="text-center text-muted py-4">No recent trades</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+.sq-logo, .mobile-logo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 25px;
+    font-weight: 800;
+    color: #FFFFFF;
+    text-decoration: none;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease;
+    transform: translateY(90%);
+}
+
+
+.gold-q {
+    color: #FFD700;
+}
+
+.sq-logo:hover, .mobile-logo:hover {
+    color: #F0F0F0;
+}
+
+.sq-logo:hover .gold-q, .mobile-logo:hover .gold-q {
+    color: #FFC107;
+}
+
+@media (max-width: 768px) {
+    .mobile-logo {
+        font-size: 17px;
+        font-weight: 800;
+        transform: translateY(1%);
+    }
+}

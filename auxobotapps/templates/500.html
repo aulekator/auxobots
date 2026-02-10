@@ -1,0 +1,23 @@
+
+{% extends 'frontend/base.html' %}
+{% load i18n static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+    <div class="page-title-area item-bg-404">
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="container">
+                    <div class="page-title-content text-center">
+                        <h2 class="animated fadeInDown">500</h2>
+                        <h2>Looks like something went wrong!</h2>
+                        <a href="" class="animated fadeInUp button_intro">{% trans "Back to home" %}</a>             
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
